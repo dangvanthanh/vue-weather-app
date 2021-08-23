@@ -4,6 +4,19 @@
   box-sizing: border-box;
 }
 
+@font-face {
+  font-family: flow-circular;
+  src: url(/static/webfonts/flow-circular.woff);
+}
+@font-face {
+  font-family: flow-rounded;
+  src: url(/static/webfonts/flow-rounded.woff);
+}
+@font-face {
+  font-family: flow-block;
+  src: url(/static/webfonts/flow-block.woff);
+}
+
 body {
   background: #cccfdd;
   margin: 0;
