@@ -360,11 +360,8 @@ watch(systemUsed, (newVal) => {
 }
 
 .dialog-description {
-  color: rgba(107, 114, 128, 1);
-}
-
-.dialog-description::first-letter {
   text-transform: capitalize;
+  color: rgba(107, 114, 128, 1);
 }
 
 .dialog-button {
