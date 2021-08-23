@@ -128,13 +128,30 @@ watch(systemUsed, (newVal) => {
           </svg>
         </button>
       </div>
-      <input
-        class="input"
-        type="text"
-        placeholder="Search for places..."
-        v-model="location"
-        @keydown="handleKeydown"
-      />
+      <div class="search">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          />
+        </svg>
+        <input
+          class="input"
+          type="text"
+          placeholder="Weather in your city..."
+          v-model="location"
+          @keydown="handleKeydown"
+        />
+      </div>
+
       <div class="name">{{ weather.name }}, {{ weather.country }}</div>
       <p class="description">{{ weather.description }}</p>
       <p class="status">
@@ -234,9 +251,11 @@ watch(systemUsed, (newVal) => {
 
 .input {
   width: 100%;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  padding: 0.5rem 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  padding: 0.5rem 1rem 0.5rem 2rem;
   border-radius: 0.25rem;
+  box-shadow: 0 1px 3px -1px rgba(0, 0, 0, 0.1),
+    0 2px 2px -1px rgba(0, 0, 0, 0.04);
 }
 
 .name {
@@ -373,6 +392,19 @@ watch(systemUsed, (newVal) => {
   color: #fff;
   border-radius: 0.25rem;
   cursor: pointer;
+}
+
+.search {
+  position: relative;
+}
+
+.search svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: rgba(0, 0, 0, 0.25);
+  position: absolute;
+  top: 5px;
+  left: 5px;
 }
 
 @media (min-width: 978px) {
