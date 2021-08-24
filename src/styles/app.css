@@ -17,13 +17,240 @@
   src: url(/static/webfonts/flow-block.woff);
 }
 
+:root {
+  --color-accent: #d8e8e3;
+  --color-tenant: #079427;
+  --color-background: #f1eef8;
+  --color-text: #473f4e;
+  --color-border: #d8e8e3;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-accent: #473f4e;
+    --color-tenant: #9a9b9e;
+    --color-background: #21222a;
+    --color-text: #fff;
+    --color-border: #473f4e;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-accent: #d8e8e3;
+    --color-tenant: #079427;
+    --color-background: #f1eef8;
+    --color-text: #473f4e;
+    --color-border: #d8e8e3;
+  }
+}
+
 body {
-  background: #cccfdd;
+  background: var(--color-background);
   margin: 0;
   font-family: 'Poppins', sans-serif;
   font-size: 16px;
   line-height: 1.5;
-  color: #333;
+  color: var(--text-color);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.is-loading {
+  font-family: flow-circular;
+  color: var(--color-accent);
+}
+
+.home {
+  background: #fff;
+  width: 60rem;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+  margin: 1rem;
+}
+
+.home-weather {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 2rem;
+}
+
+.home-stats {
+  background-color: var(--color-accent);
+  display: flex;
+  flex: 1 1 0%;
+  padding: 2rem;
+}
+
+.input {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  padding: 0.5rem 1rem 0.5rem 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px -1px rgba(0, 0, 0, 0.1),
+    0 2px 2px -1px rgba(0, 0, 0, 0.04);
+}
+
+.name {
+  font-size: 2rem;
+  margin: 2rem 0 1rem;
+}
+
+.description {
+  text-transform: capitalize;
+}
+
+.status {
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+}
+
+.temp {
+  font-size: 4rem;
+  text-align: center;
+  font-weight: 600;
+  position: relative;
+  line-height: 1;
+  margin: 0;
+}
+
+.temp span {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+}
+
+.temp img {
+  width: 5rem;
+  height: auto;
+  position: absolute;
+  right: -4rem;
+  top: -4rem;
+}
+
+.button-group {
+  text-align: right;
+  margin-bottom: 1rem;
+}
+
+.button-group .button {
+  margin-left: 0.25rem;
+}
+
+.button {
+  display: inline-block;
+  vertical-align: middle;
+  background: transparent;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 100%;
+  border: 1px solid transparent;
+  padding: 0;
+  cursor: pointer;
+  box-shadow: 0 0 transparent, 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.button svg {
+  fill: currentColor;
+}
+
+.button.active {
+  background: var(--color-accent);
+  color: var(--color-tenant);
+  cursor: default;
+  pointer-events: none;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%;
+  gap: 1rem;
+}
+
+.diglog {
+  overflow-y: auto;
+  z-index: 10;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: fixed;
+}
+
+.dialog-overlay {
+  background: rgba(0, 0, 0, 0.15);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: fixed;
+}
+
+.dialog-wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dialog-content {
+  background: #fff;
+  max-width: 30rem;
+  width: 100%;
+  margin: 2rem;
+  padding: 1.5rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border-radius: 0.5rem;
+  position: relative;
+  z-index: 5;
+}
+
+.dialog-content h3 {
+  font-size: 1.125rem;
+  margin: 0 0 1rem;
+}
+
+.dialog-description {
+  text-transform: capitalize;
+  color: rgba(107, 114, 128, 1);
+}
+
+.dialog-button {
+  background: linear-gradient(
+    90deg,
+    var(--color-tenant) 5%, 
+    var(--color-tenant) 30%,
+    var(--color-tenant)
+  );
+  font-size: 1rem;
+  line-height: 1.25rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-accent);
+  color: #fff;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.search {
+  position: relative;
+}
+
+.search svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: rgba(0, 0, 0, 0.25);
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+
+@media (min-width: 978px) {
+  .home-weather {
+    width: 25rem;
+  }
 }

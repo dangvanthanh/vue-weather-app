@@ -20,9 +20,9 @@ defineProps({
 })
 </script>
 
-<style scoped>
+<style>
 .card {
-  border: 1px solid #afb9de;
+  border: 1px solid var(--color-border);
   border-radius: 0.25rem;
   background: #fff;
   padding: 1rem;
