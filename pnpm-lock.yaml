@@ -1,6 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@dangvanthanh/prettier-config': ^1.0.0
   '@headlessui/vue': ^1.4.0
   '@vitejs/plugin-vue': ^1.3.0
   '@vue/compiler-sfc': ^3.0.5
@@ -14,6 +15,7 @@ dependencies:
   vue: 3.2.4
 
 devDependencies:
+  '@dangvanthanh/prettier-config': 1.0.0
   '@vitejs/plugin-vue': 1.4.0_@vue+compiler-sfc@3.2.4
   '@vue/compiler-sfc': 3.2.4
   typescript: 4.3.5
@@ -37,6 +39,10 @@ packages:
     dependencies:
       '@babel/helper-validator-identifier': 7.14.9
       to-fast-properties: 2.0.0
+
+  /@dangvanthanh/prettier-config/1.0.0:
+    resolution: {integrity: sha512-OzTjrMcoifaOE20dgqJFxvhBEJMNNgjVX/WMHCnrFeNvxskGweIuaMNgZ9Kd3jlDrtyTAJ3wDLfsCBKJUOrf1g==}
+    dev: true
 
   /@emmetio/abbreviation/2.2.2:
     resolution: {integrity: sha512-TtE/dBnkTCct8+LntkqVrwqQao6EnPAs1YN3cUgxOxTaBlesBCY37ROUAVZrRlG64GNnVShdl/b70RfAI3w5lw==}

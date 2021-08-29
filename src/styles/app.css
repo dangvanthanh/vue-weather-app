@@ -27,7 +27,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-accent: #473f4e;
+    --color-accent: #323133;
     --color-tenant: #9a9b9e;
     --color-background: #21222a;
     --color-text: #fff;

@@ -1,20 +1,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref, watch } from 'vue'
-import {
-  TransitionRoot,
-  TransitionChild,
-  Dialog,
-  DialogOverlay,
-  DialogTitle,
-} from '@headlessui/vue'
-import {
-  convertTime,
-  degToCompass,
-  getWindSpeed,
-  getVisibility,
-  getTime,
-  getAMPM,
-} from '../utils'
+import { TransitionRoot, TransitionChild, Dialog, DialogOverlay, DialogTitle } from '@headlessui/vue'
+import { convertTime, degToCompass, getWindSpeed, getVisibility, getTime, getAMPM } from '../utils'
 import Card from './Card.vue'
 
 const systemUsed = ref('metric')
@@ -52,11 +39,40 @@ const buttons = ref([
   },
 ])
 
+const map = ref(null)
+
+interface Coord {
+  lat: number
+  lng: number
+}
+
+const getHereMap = (coord: Coord) => {
+  const H = window && window.H
+
+  if (map.value) {
+   map._rawValue.innerHTML = ''
+  }
+
+  const platform = new H.service.Platform({
+    apikey: import.meta.env.VITE_HERE_APP_ID,
+  })
+  const defaultLayers = platform.createDefaultLayers()
+  const heremap = new H.Map(map.value, defaultLayers.vector.normal.map, {
+    center: { lat: coord.lat, lng: coord.lng },
+    zoom: 12,
+    pixelRatio: window.devicePixelRatio || 1,
+  })
+
+  window.addEventListener('resize', () => heremap.getViewPort().resize())
+  new H.mapevents.Behavior(new H.mapevents.MapEvents(heremap))
+  H.ui.UI.createDefault(heremap, defaultLayers)
+}
+
 const handleSearch = async (input: string) => {
   const getWeatherData = await fetch(
     `https://api.openweathermap.org/data/2.5/weather?q=${input}&units=metric&appid=${
       import.meta.env.VITE_OPENWEATHER_API_KEY
-    }`
+    }`,
   )
   const json = await getWeatherData.json()
 
@@ -80,6 +96,7 @@ const handleSearch = async (input: string) => {
     weather.visibility = json.visibility
     weather.sunrise = json.sys.sunrise
     weather.sunset = json.sys.sunset
+    getHereMap({ lat: json.coord.lat, lng: json.coord.lon })
   }
 }
 
@@ -113,6 +130,7 @@ watch(systemUsed, (newVal) => {
 </script>
 
 <template>
+  <div ref="map" class="map"></div>
   <div class="home" :class="{ 'is-loading': isLoading }">
     <div class="home-weather">
       <div class="button-group">
@@ -129,13 +147,7 @@ watch(systemUsed, (newVal) => {
         </button>
       </div>
       <div class="search">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -164,23 +176,14 @@ watch(systemUsed, (newVal) => {
     </div>
     <div class="home-stats">
       <div class="grid">
-        <Card
-          title="Humidity"
-          :metric="weather.humidity"
-          unit="%"
-          icon="/static/icons/humidity.svg"
-        />
+        <Card title="Humidity" :metric="weather.humidity" unit="%" icon="/static/icons/humidity.svg" />
         <Card
           title="Wind"
           :metric="getWindSpeed(systemUsed, weather.windSpeed)"
           :unit="systemUsed === 'metric' ? 'm/s' : 'm/h'"
           icon="/static/icons/wind.svg"
         />
-        <Card
-          title="Wind Direction"
-          :metric="degToCompass(weather.windDeg)"
-          icon="/static/icons/compass.svg"
-        />
+        <Card title="Wind Direction" :metric="degToCompass(weather.windDeg)" icon="/static/icons/compass.svg" />
         <Card
           title="Visibility"
           :metric="getVisibility(systemUsed, weather.visibility)"
@@ -220,4 +223,12 @@ watch(systemUsed, (newVal) => {
 </template>
 
 <style scoped>
+.map {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+}
 </style>
