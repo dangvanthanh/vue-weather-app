@@ -54,7 +54,7 @@ const getHereMap = (coord: Coord) => {
   }
 
   const platform = new H.service.Platform({
-    apikey: import.meta.env.VITE_HERE_APP_ID,
+    apikey: import.meta.env.VITE_HERE_API_KEY,
   })
   const defaultLayers = platform.createDefaultLayers()
   const heremap = new H.Map(map.value, defaultLayers.vector.normal.map, {
