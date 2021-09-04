@@ -1,3 +1,12 @@
+<script setup lang="ts">
+defineProps({
+  title: String,
+  metric: [String, Number],
+  unit: String,
+  icon: String,
+})
+</script>
+
 <template>
   <div class="card">
     <div class="card-info">
@@ -10,15 +19,6 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-defineProps({
-  title: String,
-  metric: [String, Number],
-  unit: String,
-  icon: String,
-})
-</script>
 
 <style>
 .card {

@@ -2,7 +2,8 @@
 import { onMounted, reactive, ref, watch } from 'vue'
 import { TransitionRoot, TransitionChild, Dialog, DialogOverlay, DialogTitle } from '@headlessui/vue'
 import { convertTime, degToCompass, getWindSpeed, getVisibility, getTime, getAMPM } from '../utils'
-import Card from './Card.vue'
+import Metric from './Metric.vue'
+import HereMap from './HereMap.vue'
 
 const systemUsed = ref('metric')
 const systemUsedIcon = ref('celsius')
@@ -39,34 +40,11 @@ const buttons = ref([
   },
 ])
 
-const map = ref(null)
-
-interface Coord {
-  lat: number
-  lng: number
-}
-
-const getHereMap = (coord: Coord) => {
-  const H = window && window.H
-
-  if (map.value) {
-   map._rawValue.innerHTML = ''
-  }
-
-  const platform = new H.service.Platform({
-    apikey: import.meta.env.VITE_HERE_API_KEY,
-  })
-  const defaultLayers = platform.createDefaultLayers()
-  const heremap = new H.Map(map.value, defaultLayers.vector.normal.map, {
-    center: { lat: coord.lat, lng: coord.lng },
-    zoom: 12,
-    pixelRatio: window.devicePixelRatio || 1,
-  })
-
-  window.addEventListener('resize', () => heremap.getViewPort().resize())
-  new H.mapevents.Behavior(new H.mapevents.MapEvents(heremap))
-  H.ui.UI.createDefault(heremap, defaultLayers)
-}
+const hereMap = reactive({
+  lat: 0,
+  lng: 0,
+  zoom: 12,
+})
 
 const handleSearch = async (input: string) => {
   const getWeatherData = await fetch(
@@ -96,7 +74,8 @@ const handleSearch = async (input: string) => {
     weather.visibility = json.visibility
     weather.sunrise = json.sys.sunrise
     weather.sunset = json.sys.sunset
-    getHereMap({ lat: json.coord.lat, lng: json.coord.lon })
+    hereMap.lat = json.coord.lat
+    hereMap.lng = json.coord.lon
   }
 }
 
@@ -130,7 +109,7 @@ watch(systemUsed, (newVal) => {
 </script>
 
 <template>
-  <div ref="map" class="map"></div>
+  <HereMap :lat="hereMap.lat" :lng="hereMap.lng" />
   <div class="home" :class="{ 'is-loading': isLoading }">
     <div class="home-weather">
       <div class="button-group">
@@ -146,7 +125,7 @@ watch(systemUsed, (newVal) => {
           </svg>
         </button>
       </div>
-      <div class="search">
+     <div class="search">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             stroke-linecap="round"
@@ -176,27 +155,27 @@ watch(systemUsed, (newVal) => {
     </div>
     <div class="home-stats">
       <div class="grid">
-        <Card title="Humidity" :metric="weather.humidity" unit="%" icon="/static/icons/humidity.svg" />
-        <Card
+        <Metric title="Humidity" :metric="weather.humidity" unit="%" icon="/static/icons/humidity.svg" />
+        <Metric
           title="Wind"
           :metric="getWindSpeed(systemUsed, weather.windSpeed)"
           :unit="systemUsed === 'metric' ? 'm/s' : 'm/h'"
           icon="/static/icons/wind.svg"
         />
-        <Card title="Wind Direction" :metric="degToCompass(weather.windDeg)" icon="/static/icons/compass.svg" />
-        <Card
+        <Metric title="Wind Direction" :metric="degToCompass(weather.windDeg)" icon="/static/icons/compass.svg" />
+        <Metric
           title="Visibility"
           :metric="getVisibility(systemUsed, weather.visibility)"
           :unit="systemUsed === 'metric' ? 'km' : 'miles'"
           icon="/static/icons/barometer.svg"
         />
-        <Card
+        <Metric
           title="Sunrise"
           :metric="getTime(systemUsed, weather.sunrise, weather.timezone)"
           :unit="getAMPM(systemUsed, weather.sunrise, weather.timezone)"
           icon="/static/icons/sunrise.svg"
         />
-        <Card
+        <Metric
           title="Sunset"
           :metric="getTime(systemUsed, weather.sunset, weather.timezone)"
           :unit="getAMPM(systemUsed, weather.sunset, weather.timezone)"
@@ -222,13 +201,4 @@ watch(systemUsed, (newVal) => {
   </Dialog>
 </template>
 
-<style scoped>
-.map {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: -1;
-}
-</style>
+<style scoped></style>
